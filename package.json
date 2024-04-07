@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "playground and notes",
   "main": "index.js",
+  "engines": {
+    "node": ">=16.0.0 <17.0.0"
+  },
   "type": "module",
   "directories": {
     "lib": "lib"
