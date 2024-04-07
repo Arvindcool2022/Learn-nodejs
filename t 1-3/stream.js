@@ -1,10 +1,11 @@
-const fs = require('fs');
-const path = require('path');
+import { createReadStream, createWriteStream } from 'fs';
+import { join } from 'path';
+import { __dirname, __filename } from './utils.js';
 
-const fPath = name => path.join(__dirname, 'lib', name);
-const rs = fs.createReadStream(fPath('lorem.txt'), { encoding: 'utf-8' });
+const fPath = name => join(__dirname, 'lib', name);
+const rs = createReadStream(fPath('lorem.txt'), { encoding: 'utf-8' });
 
-const ws = fs.createWriteStream(fPath('newLorem.txt'));
+const ws = createWriteStream(fPath('newLorem.txt'));
 
 // ❌ Bad
 // rs.on('data', chuck => {

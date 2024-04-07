@@ -1,14 +1,14 @@
-const fs = require('fs');
+import { existsSync, mkdir, rmdir } from 'fs';
 
-if (!fs.existsSync('./new'))
-  fs.mkdir('./new', err => {
+if (!existsSync('./new'))
+  mkdir('./new', err => {
     if (err) throw err;
     console.log('mkdir');
   });
 else console.log('already exists');
 
-if (fs.existsSync('./new'))
-  fs.rmdir('./new', err => {
+if (existsSync('./new'))
+  rmdir('./new', err => {
     if (err) throw err;
     console.log('rmdir');
   });
