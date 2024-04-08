@@ -12,7 +12,7 @@ const dirPath = name => path.join(__dirname, name);
 const fPath = (dir, fileName) => path.join(__dirname, dir, fileName);
 
 // Event Func
-const logEvent = async message => {
+const logEvent = async (message, logName) => {
   const dateTime = format(new Date(), 'yyyy-MM-dd\tHH:mm:ss');
   const logItem = `\n${dateTime}\t${uuid(16)}\t${message}`;
   try {
@@ -20,7 +20,7 @@ const logEvent = async message => {
       await mkdir(dirPath('logs'));
     }
 
-    await appendFile(fPath('logs', 'events.txt'), logItem);
+    await appendFile(fPath('logs', logName), logItem);
   } catch (e) {
     console.log(e);
   }

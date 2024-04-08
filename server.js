@@ -10,6 +10,7 @@ const emitter = new Emitter();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const PORT = process.env.PORT || 1234;
+emitter.on('log', (msg, fName) => logEvent(msg, fName));
 
 const serveFile = async (filePath, contentType, response) => {
   try {
@@ -24,6 +25,7 @@ const serveFile = async (filePath, contentType, response) => {
     );
   } catch (error) {
     console.log(error);
+    emitter.emit('log', `${error.name}\t:${error.message}`, 'errLog.txt');
     response.statuscode = 500;
     response.end();
   }
@@ -31,6 +33,7 @@ const serveFile = async (filePath, contentType, response) => {
 
 const server = http.createServer((req, res) => {
   console.log(req.url, req.method);
+  emitter.emit('log', `${req.url}\t${req.method}`, 'reqLog.txt');
   const extension = extname(req.url);
   const extensionContentTypeMapping = {
     '.css': 'text/css',
