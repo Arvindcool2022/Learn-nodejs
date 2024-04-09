@@ -1,13 +1,34 @@
 import express from 'express';
 import { fileURLToPath } from 'url';
+import cors from 'cors';
 import path from 'path';
+import EventEmitter from 'events';
+import logEvent from './middleware/logEvents.js';
+class Emitter extends EventEmitter {}
+const emitter = new Emitter();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 1234;
-console.log(process.cwd());
-app.use(express.static('./public'));
+const whiteList = [
+  'https://www.sitename.com',
+  'http://127.0.0.1:5173',
+  'https://localhost:1234',
+];
+console.log('process: ', process.cwd());
+console.log('__dirname: ', __dirname);
+emitter.on('log', (msg, fName) => logEvent(msg, fName));
+
+app.use((req, res, next) => {
+  console.log('logger: ', req.headers.origin, req.url, req.method);
+  emitter.emit('log', `${req.url}\t:${req.method}`, 'reqLog.txt');
+  next();
+});
+app.use(cors(whiteList));
+app.use(express.urlencoded()); //! what do these two does
+app.use(express.json()); //! what do these two does
+app.use(express.static('./public')); //# middleware for static files
 
 const indexRoute = '^/$|/index.html';
 app.get(indexRoute, (req, res) => {
@@ -33,7 +54,7 @@ app.get('/new-page(.html)?', (req, res) => {
 app.get(
   '/old-page(.html)?',
   (req, res, next) => {
-    console.log('redirecting'); // middleware
+    console.log('redirecting'); //# custom middleware
     next();
   },
   (req, res) => {
@@ -53,7 +74,8 @@ const serve404 = (req, res) => {
   res
     .status(404)
     .sendFile(path.join(process.cwd(), 'public', 'views', '404.html'));
+  emitter.emit('log', `${req.url}\t:${req.method}`, 'errLog.txt');
 };
 
-app.get('/*', [errorLogger, somethingElse, serve404]);
+app.get('/*', [errorLogger, somethingElse, serve404]); //# custom middleware
 app.listen(port, () => console.log(`Server is running on port ${port}`));
