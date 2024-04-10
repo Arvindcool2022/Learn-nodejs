@@ -1,0 +1,18 @@
+[
+  {
+    "userName": "Arvind",
+    "password": "$2b$10$4dDTOsK6rba6iwHTkTuFuOoR86LXSbV7plVGj3nRSnCG5DkuqL1BS"
+  },
+  {
+    "userName": "daniel",
+    "password": "$2b$10$B8AbqKyNEBABWlQ0HfTUtu7cl3RpOzCl/C6hS3a.pGca/GDGD5u/G"
+  },
+  {
+    "userName": "amy",
+    "password": "$2b$10$VdBzJoIh5bWwSzhKjm3EGexBtVctEGiKS5cn4Nuo9UBcUSiSpDMXC"
+  },
+  {
+    "userName": "arun",
+    "password": "$2b$10$Fqt1MZSYvDZLoYW1Tvvb7.G8GfLyY34huAYA58HVStvYa8XCCoavC"
+  }
+]

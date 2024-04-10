@@ -12,7 +12,7 @@ export const allEmp = (req, res) => {
 
 export const addEmp = (req, res) => {
   if (data.employees.map(x => x.employee_id).includes(req.body.employee_id)) {
-    res.status(400).json({ error: 'Employee ID already exists' });
+    res.status(409).json({ error: 'Employee ID already exists' });
     return;
   }
   if (!validateEmployee(req.body)) {

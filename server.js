@@ -2,6 +2,8 @@ import express from 'express';
 import { router as subdirRouter } from './routes/subdir.js';
 import { router as rootRouter } from './routes/root.js';
 import { router as employeesRouter } from './routes/api/employees.route.js';
+import { router as registerRouter } from './routes/register.js';
+import { router as loginRouter } from './routes/login.js';
 import cors from 'cors';
 import EventEmitter from 'events';
 import logEvent, { emitFunc } from './middleware/logEvents.js';
@@ -23,6 +25,8 @@ app.use(express.static('./public')); //# middleware for static files
 app.use('/', rootRouter);
 app.use('/subdir', subdirRouter);
 app.use('/employee(s)?', employeesRouter);
+app.use('/register', registerRouter);
+app.use('/login', loginRouter);
 
 const errorLogger = (req, res, next) => {
   console.log('error logged');
