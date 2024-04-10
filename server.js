@@ -21,21 +21,11 @@ app.use(cors(corsOptions));
 app.use(express.urlencoded()); //! what do these two does
 app.use(express.json()); //! what do these two does
 app.use(express.static('./public')); //# middleware for static files
-// app.use('/subdir', express.static('./public'));
 app.use('/', rootRouter);
 app.use('/subdir', subdirRouter);
 app.use('/employee(s)?', employeesRouter);
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
-
-const errorLogger = (req, res, next) => {
-  console.log('error logged');
-  next();
-};
-const somethingElse = (req, res, next) => {
-  console.log('2nd middleware');
-  next();
-};
 
 app.all('*', [
   errorLogger,
@@ -46,3 +36,12 @@ app.all('*', [
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
+
+function errorLogger(req, res, next) {
+  console.log('error logged');
+  next();
+}
+function somethingElse(req, res, next) {
+  console.log('2nd middleware');
+  next();
+}

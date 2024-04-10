@@ -12,7 +12,6 @@ console.log(usersDB.users);
 
 const handleLogIn = async (req, res) => {
   const { userName, password } = req.body;
-  console.log('1st', req.body);
   if (!userName || !password) {
     return res
       .status(400)

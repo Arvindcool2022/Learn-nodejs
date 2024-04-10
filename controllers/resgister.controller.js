@@ -12,7 +12,6 @@ const usersDB = {
 console.log(usersDB.users);
 const handleRegister = async (req, res) => {
   const { userName, password } = req.body;
-  console.log('1st', req.body);
   if (!userName || !password) {
     return res
       .status(400)
@@ -27,7 +26,7 @@ const handleRegister = async (req, res) => {
   try {
     const hashedPwd = await bcrypt.hash(password, 10);
     const newUser = { userName, password: hashedPwd };
-    console.log('2st', newUser);
+    console.log('creating', newUser);
     usersDB.setUsers([...usersDB.users, newUser]);
     await writeFile(jsonPath, JSON.stringify(usersDB.users));
     res.status(201).json('ok');
