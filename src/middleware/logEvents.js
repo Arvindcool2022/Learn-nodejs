@@ -33,3 +33,9 @@ export const logger = (req, res, next) => {
   console.log(`${req.method} ${req.path}`);
   next();
 };
+
+export const emitFunc = (req, res, next, emitter) => {
+  console.log('logger: ', req.headers.origin, req.url, req.method);
+  emitter.emit('log', `${req.url}\t:${req.method}`, 'reqLog.txt');
+  next();
+};
