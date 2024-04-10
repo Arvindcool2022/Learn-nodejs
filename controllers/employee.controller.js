@@ -2,12 +2,7 @@ import path from 'path';
 import { readFileSync } from 'fs';
 import { writeFile } from 'fs/promises';
 const data = {};
-const jsonPath = path.join(
-  process.cwd(),
-  'public',
-  'data',
-  'employeesData.json'
-);
+const jsonPath = path.join(process.cwd(), 'model', 'employeesData.json');
 data.employees = JSON.parse(readFileSync(jsonPath, 'utf-8'));
 const requiredFields = Object.keys(data.employees[0]);
 

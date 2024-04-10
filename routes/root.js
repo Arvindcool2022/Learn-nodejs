@@ -5,7 +5,7 @@ const router = express.Router();
 
 const indexRoute = '^/$|/index(.html)?';
 router.get(indexRoute, (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'public', 'views', 'index.html'));
+  res.sendFile(path.join(process.cwd(), 'views', 'index.html'));
 });
 router.post(indexRoute, (req, res) => {
   res.send('<h1>Home post</h1>');
@@ -18,7 +18,7 @@ router.delete(indexRoute, (req, res) => {
 });
 
 router.get('/new-page(.html)?', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'public', 'views', 'new-page.html'));
+  res.sendFile(path.join(process.cwd(), 'views', 'new-page.html'));
 });
 router.get(
   '/old-page(.html)?',
