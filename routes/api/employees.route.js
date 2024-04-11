@@ -7,7 +7,6 @@ import {
   notAllowed,
   updateOne,
 } from '../../controllers/employee.controller.js';
-
 const router = Router();
 
 router.route('/').get(allEmp).post(addEmp).put(notAllowed).delete(notAllowed);

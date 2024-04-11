@@ -9,6 +9,7 @@ import EventEmitter from 'events';
 import logEvent, { emitFunc } from './middleware/logEvents.js';
 import errorHandler, { serve404 } from './middleware/errorHandler.js';
 import { corsOptions } from './config/cors.config.js';
+import { verifyJWT } from './middleware/verifyJWT.js';
 class Emitter extends EventEmitter {}
 const emitter = new Emitter();
 
@@ -23,10 +24,10 @@ app.use(express.json()); //! what do these two does
 app.use(express.static('./public')); //# middleware for static files
 app.use('/', rootRouter);
 app.use('/subdir', subdirRouter);
-app.use('/employee(s)?', employeesRouter);
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
-
+app.use(verifyJWT);
+app.use('/employee(s)?', employeesRouter);
 app.all('*', [
   errorLogger,
   somethingElse,

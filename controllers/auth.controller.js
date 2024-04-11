@@ -11,11 +11,12 @@ const usersDB = {
   users: JSON.parse(readFileSync(jsonPath, 'utf8')),
   setUsers: function (data) {
     this.users = data;
-  }
+  },
 };
 
 const handleLogIn = async (req, res) => {
   const { userName, password } = req.body;
+  console.log(req.body);
   if (!userName || !password) {
     return res
       .status(400)
