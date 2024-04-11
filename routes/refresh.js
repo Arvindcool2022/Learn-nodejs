@@ -1,12 +1,12 @@
 import express from 'express';
-import { handleRegister } from '../controllers/resgister.controller.js';
+import { handleRefreshToken } from '../controllers/refreshToken.controller.js';
 import { notAllowed } from '../controllers/employee.controller.js';
 const NA = ['*', notAllowed];
 const router = express.Router();
 
 router
-  .post('/', handleRegister)
-  .get(...NA)
+  .get('/', handleRefreshToken)
+  .post(...NA)
   .put(...NA)
   .delete(...NA);
 

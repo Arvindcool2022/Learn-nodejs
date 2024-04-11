@@ -1,18 +1,18 @@
 import express from 'express';
+import cors from 'cors';
+import EventEmitter from 'events';
+import cookieParser from 'cookie-parser';
 import { router as subdirRouter } from './routes/subdir.js';
 import { router as rootRouter } from './routes/root.js';
 import { router as employeesRouter } from './routes/api/employees.route.js';
 import { router as registerRouter } from './routes/register.js';
 import { router as loginRouter } from './routes/login.js';
-import { router as refreshRouter } from './routes/refersh.js';
+import { router as refreshRouter } from './routes/refresh.js';
 import { router as logoutRouter } from './routes/logout.js';
-import cors from 'cors';
-import EventEmitter from 'events';
+import { corsOptions } from './config/cors.config.js';
 import logEvent, { emitFunc } from './middleware/logEvents.js';
 import errorHandler, { serve404 } from './middleware/errorHandler.js';
-import { corsOptions } from './config/cors.config.js';
 import { verifyJWT } from './middleware/verifyJWT.js';
-import cookieParser from 'cookie-parser';
 class Emitter extends EventEmitter {}
 const emitter = new Emitter();
 
@@ -34,21 +34,16 @@ app.use('/refresh', refreshRouter);
 app.use('/logout', logoutRouter);
 app.use(verifyJWT);
 app.use('/employee(s)?', employeesRouter);
-app.all('*', [
-  errorLogger,
-  somethingElse,
-  (req, res) => serve404(req, res, emitter),
-]); //# custom middleware
-
+app.all('*', [mid1, mid2, (req, res) => serve404(req, res, emitter)]); //# custom middleware
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
 
-function errorLogger(req, res, next) {
+function mid1(req, res, next) {
   console.log('error logged');
   next();
 }
-function somethingElse(req, res, next) {
+function mid2(req, res, next) {
   console.log('2nd middleware');
   next();
 }

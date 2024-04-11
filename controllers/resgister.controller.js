@@ -9,7 +9,6 @@ const usersDB = {
     this.users = data;
   },
 };
-console.log(usersDB.users);
 const handleRegister = async (req, res) => {
   const { userName, password } = req.body;
   if (!userName || !password) {
@@ -26,7 +25,6 @@ const handleRegister = async (req, res) => {
   try {
     const hashedPwd = await bcrypt.hash(password, 10);
     const newUser = { userName, password: hashedPwd };
-    console.log('creating', newUser);
     usersDB.setUsers([...usersDB.users, newUser]);
     await writeFile(jsonPath, JSON.stringify(usersDB.users));
     res.status(201).json('ok');

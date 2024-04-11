@@ -5,20 +5,19 @@ import { readFileSync } from 'fs';
 dotenv.config();
 
 const jsonPath = path.join(process.cwd(), 'model', 'userData.json');
-const usersDB = {
-  users: JSON.parse(readFileSync(jsonPath, 'utf8')),
-  setUsers: function (data) {
-    this.users = data;
-  },
-};
 
 export const handleRefreshToken = (req, res) => {
+  const usersDB = {
+    users: JSON.parse(readFileSync(jsonPath, 'utf8')),
+    setUsers: function (data) {
+      this.users = data;
+    },
+  };
   try {
-    const { cookie } = req;
-    if (!cookie?.jwt) return res.sendStatus(401);
-    console.log(cookie.jwt);
+    const { cookies } = req;
+    if (!cookies?.jwt) return res.sendStatus(401);
 
-    const refreshToken = cookie.jwt;
+    const refreshToken = cookies.jwt;
     const findUser = usersDB.users.find(
       per => per.refreshToken === refreshToken
     );

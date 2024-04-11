@@ -5,18 +5,16 @@ import { writeFile } from 'fs/promises';
 import JWT from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
-
 const jsonPath = path.join(process.cwd(), 'model', 'userData.json');
-const usersDB = {
-  users: JSON.parse(readFileSync(jsonPath, 'utf8')),
-  setUsers: function (data) {
-    this.users = data;
-  },
-};
 
 const handleLogIn = async (req, res) => {
+  const usersDB = {
+    users: JSON.parse(readFileSync(jsonPath, 'utf8')),
+    setUsers: function (data) {
+      this.users = data;
+    },
+  };
   const { userName, password } = req.body;
-  console.log(req.body);
   if (!userName || !password) {
     return res
       .status(400)
@@ -47,7 +45,10 @@ const handleLogIn = async (req, res) => {
     const currentUser = { ...findUser, refreshToken };
     usersDB.setUsers([...otherUser, currentUser]);
     await writeFile(jsonPath, JSON.stringify(usersDB.users));
-    res.cookie('jwt'.refreshToken, { http: true, maxAge: 1000 * 60 * 60 * 24 });
+    res.cookie('jwt', refreshToken, {
+      http: true,
+      maxAge: 1000 * 60 * 60 * 24,
+    });
     res.json({ accessToken });
   } else {
     res.status(401).json({ error: 'invalid credentials' });

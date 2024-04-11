@@ -59,7 +59,6 @@ export const deleteOne = (req, res) => {
   const index = data.employees
     .map(x => x.employee_id)
     .indexOf(parseInt(req.params.id));
-  console.log(index);
   if (index === -1) {
     res.status(400).json({ error: "Employee ID doesn't exists" });
     return;
