@@ -28,31 +28,27 @@ const handleLogIn = async (req, res) => {
   }
 
   const match = await bcrypt.compare(password, findUser.password);
-  if (match) {
-    const accessToken = JWT.sign(
-      { userName: findUser?.userName },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '60s' }
-    );
-    const refreshToken = JWT.sign(
-      { userName: findUser?.userName },
-      process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: '1d' }
-    );
-    const otherUser = usersDB.users.filter(
-      per => per.userName !== findUser.userName
-    );
-    const currentUser = { ...findUser, refreshToken };
-    usersDB.setUsers([...otherUser, currentUser]);
-    await writeFile(jsonPath, JSON.stringify(usersDB.users));
-    res.cookie('jwt', refreshToken, {
-      http: true,
-      maxAge: 1000 * 60 * 60 * 24,
-    });
-    res.json({ accessToken });
-  } else {
-    res.status(401).json({ error: 'invalid credentials' });
-  }
+  if (!match) return res.status(401).json({ error: 'invalid credentials' });
+
+  const accessToken = JWT.sign({ userName }, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: '60s',
+  });
+  const refreshToken = JWT.sign(
+    { userName },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: '1d' }
+  );
+  const otherUser = usersDB.users.filter(
+    per => per.userName !== findUser.userName
+  );
+  const currentUser = { ...findUser, refreshToken };
+  usersDB.setUsers([...otherUser, currentUser]);
+  await writeFile(jsonPath, JSON.stringify(usersDB.users));
+  res.cookie('jwt', refreshToken, {
+    http: true,
+    maxAge: 1000 * 60 * 60 * 24,
+  });
+  res.json({ accessToken });
 };
 
 export { handleLogIn };

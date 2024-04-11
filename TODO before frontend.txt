@@ -1,0 +1,8 @@
+1. to send credential to backend, include : credentials true in front end 
+2. then cors error will happen. 
+3. fix: In server use a middleware to set res.header("Access-Control-Allow-Credentials",true)
+4. use this before cors middleware
+
+problem 2 (same-site error on cookies)
+1. add sameSite:none, then secure:true while setting cookies
+2. while deleteing add all options too expect for maxage
