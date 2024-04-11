@@ -1,3 +1,4 @@
 node_modules
 logs
 t-4/logs
+.env
