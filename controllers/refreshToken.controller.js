@@ -29,10 +29,11 @@ export const handleRefreshToken = (req, res) => {
       (err, decoded) => {
         if (err || findUser?.userName !== decoded?.userName)
           return res.sendStatus(403);
+        const roles = Object.values(findUser.roles);
 
         const accessToken = JWT.sign(
-          { userName: decoded.userName },
-          process.env.REFRESH_TOKEN_SECRET,
+          { userInfo: { userName: decoded.userName, roles } },
+          process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: '60s' }
         );
 

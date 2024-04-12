@@ -24,7 +24,7 @@ const handleRegister = async (req, res) => {
 
   try {
     const hashedPwd = await bcrypt.hash(password, 10);
-    const newUser = { userName, password: hashedPwd };
+    const newUser = { userName, roles: { user: 3000 }, password: hashedPwd };
     usersDB.setUsers([...usersDB.users, newUser]);
     await writeFile(jsonPath, JSON.stringify(usersDB.users));
     res.status(201).json('ok');

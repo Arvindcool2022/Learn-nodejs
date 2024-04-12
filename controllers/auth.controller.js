@@ -29,10 +29,12 @@ const handleLogIn = async (req, res) => {
 
   const match = await bcrypt.compare(password, findUser.password);
   if (!match) return res.status(401).json({ error: 'invalid credentials' });
-
-  const accessToken = JWT.sign({ userName }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: '60s',
-  });
+  const roles = Object.values(findUser.roles);
+  const accessToken = JWT.sign(
+    { userInfo: { userName, roles } },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '60s' }
+  );
   const refreshToken = JWT.sign(
     { userName },
     process.env.REFRESH_TOKEN_SECRET,
