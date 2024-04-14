@@ -4,13 +4,24 @@ import { writeFile } from 'fs/promises';
 const data = {};
 const jsonPath = path.join(process.cwd(), 'model', 'employeesData.json');
 data.employees = JSON.parse(readFileSync(jsonPath, 'utf-8'));
+import connectToDB from '../config/connectToDB';
 const requiredFields = Object.keys(data.employees[0]);
 
+//# updateone and deleteone should be done after validation
+
 export const allEmp = (req, res) => {
+  //await MyModel.find({});
   res.json(data.employees);
 };
 
 export const addEmp = (req, res) => {
+  //   const newUser = new User({
+  //   userName,
+  //   roles: { user: 3000 },
+  //   password: hashedPwd
+  // });
+
+  // await newUser.save();
   if (data.employees.map(x => x.employee_id).includes(req.body.employee_id)) {
     res.status(409).json({ error: 'Employee ID already exists' });
     return;
@@ -25,6 +36,7 @@ export const addEmp = (req, res) => {
 };
 
 export const getOne = (req, res) => {
+  // await Adventure.findOne({employee_id:req.params.id})
   const index = data.employees
     .map(x => x.employee_id)
     .indexOf(parseInt(req.params.id));
@@ -37,6 +49,8 @@ export const getOne = (req, res) => {
 };
 
 export const updateOne = (req, res) => {
+  // const query = {employee_id:req.params.id};
+  // Model.findOneAndUpdate(query, { name: 'jason bourne' }, options)
   if (!Object.entries(req.body).length) {
     res.status(400).json({ error: 'Empty Body received' });
     return;
@@ -56,6 +70,7 @@ export const updateOne = (req, res) => {
 };
 
 export const deleteOne = (req, res) => {
+  //findOneAndDelete(conditions, options)
   const index = data.employees
     .map(x => x.employee_id)
     .indexOf(parseInt(req.params.id));

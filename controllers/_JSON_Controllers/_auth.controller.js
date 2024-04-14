@@ -1,17 +1,26 @@
+import path from 'path';
 import bcrypt from 'bcrypt';
+import { readFileSync } from 'fs';
+import { writeFile } from 'fs/promises';
 import JWT from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import User from '../model/user.model';
 dotenv.config();
+const jsonPath = path.join(process.cwd(), 'model', 'userData.json');
 
 const handleLogIn = async (req, res) => {
+  const usersDB = {
+    users: JSON.parse(readFileSync(jsonPath, 'utf8')),
+    setUsers: function (data) {
+      this.users = data;
+    }
+  };
   const { userName, password } = req.body;
   if (!userName || !password) {
     return res
       .status(400)
       .json({ message: 'userName and password are required' });
   }
-  const findUser = await User.findOne({ userName });
+  const findUser = usersDB.users.find(per => per.userName === userName);
   if (!findUser) {
     return res
       .status(401)
@@ -31,12 +40,12 @@ const handleLogIn = async (req, res) => {
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: '1d' }
   );
-
-  const updatedUser = await User.findOneAndUpdate(
-    { userName },
-    { $set: { refreshToken } },
-    { new: true } // Return the updated document
+  const otherUser = usersDB.users.filter(
+    per => per.userName !== findUser.userName
   );
+  const currentUser = { ...findUser, refreshToken };
+  usersDB.setUsers([...otherUser, currentUser]);
+  await writeFile(jsonPath, JSON.stringify(usersDB.users));
   res.cookie('jwt', refreshToken, {
     http: true,
     maxAge: 1000 * 60 * 60 * 24

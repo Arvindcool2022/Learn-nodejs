@@ -1,20 +1,26 @@
 import path from 'path';
 import JWT from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import User from '../model/user.model.js';
-import connectToDB from '../config/connectToDB';
+import { readFileSync } from 'fs';
 dotenv.config();
 
-export const handleRefreshToken = async (req, res) => {
-  try {
-    const connected = await connectToDB();
-    if (!connected) throw new Error('DB no connected');
+const jsonPath = path.join(process.cwd(), 'model', 'userData.json');
 
+export const handleRefreshToken = (req, res) => {
+  const usersDB = {
+    users: JSON.parse(readFileSync(jsonPath, 'utf8')),
+    setUsers: function (data) {
+      this.users = data;
+    }
+  };
+  try {
     const { cookies } = req;
     if (!cookies?.jwt) return res.sendStatus(401);
 
     const refreshToken = cookies.jwt;
-    const findUser = await User.findOne({ refreshToken });
+    const findUser = usersDB.users.find(
+      per => per.refreshToken === refreshToken
+    );
     if (!findUser) return res.sendStatus(403);
 
     JWT.verify(
