@@ -1,20 +1,24 @@
 import bcrypt from 'bcrypt';
-import User from '../model/user.model';
+import User from '../model/user.model.js';
+import connectToDB from '../config/connectToDB.js';
 
 const handleRegister = async (req, res) => {
-  const { userName, password } = req.body;
-  if (!userName || !password) {
-    return res
-      .status(400)
-      .json({ message: 'userName and password are required' });
-  }
-  const alreadyExist = await User.findOne({ userName });
-  if (alreadyExist)
-    return res
-      .status(409)
-      .json({ message: `userName: ${userName} already exists` });
-
   try {
+    const connected = await connectToDB();
+    if (!connected) throw new Error('DB no connected');
+    const { userName, password } = req.body;
+
+    if (!userName || !password) {
+      return res
+        .status(400)
+        .json({ message: 'userName and password are required' });
+    }
+    const alreadyExist = await User.findOne({ userName });
+    if (alreadyExist)
+      return res
+        .status(409)
+        .json({ message: `userName: ${userName} already exists` });
+
     const hashedPwd = await bcrypt.hash(password, 10);
     const newUser = new User({
       userName,

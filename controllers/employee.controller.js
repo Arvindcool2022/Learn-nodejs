@@ -4,7 +4,7 @@ import { writeFile } from 'fs/promises';
 const data = {};
 const jsonPath = path.join(process.cwd(), 'model', 'employeesData.json');
 data.employees = JSON.parse(readFileSync(jsonPath, 'utf-8'));
-import connectToDB from '../config/connectToDB';
+import connectToDB from '../config/connectToDB.js';
 const requiredFields = Object.keys(data.employees[0]);
 
 //# updateone and deleteone should be done after validation

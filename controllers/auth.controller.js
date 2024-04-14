@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import JWT from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import User from '../model/user.model';
+import User from '../model/user.model.js';
 dotenv.config();
 
 const handleLogIn = async (req, res) => {

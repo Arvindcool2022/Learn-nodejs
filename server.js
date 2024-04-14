@@ -14,7 +14,7 @@ import logEvent, { emitFunc } from './middleware/logEvents.js';
 import errorHandler, { serve404 } from './middleware/errorHandler.js';
 import { verifyJWT } from './middleware/verifyJWT.js';
 import mongoose from 'mongoose';
-import connectToDB from './config/dbConnect.js';
+import connectToDB from './config/connectToDB.js';
 class Emitter extends EventEmitter {}
 const emitter = new Emitter();
 connectToDB();
@@ -25,7 +25,7 @@ emitter.on('log', (msg, fName) => logEvent(msg, fName));
 app.use((req, res, next) => emitFunc(req, res, next, emitter));
 app.use(cors(corsOptions));
 // app.use(express.urlencoded());
-// app.use(express.json());
+app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('./public')); //# middleware for static files
 app.use('/', rootRouter);

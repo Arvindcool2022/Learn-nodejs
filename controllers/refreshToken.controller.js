@@ -2,7 +2,7 @@ import path from 'path';
 import JWT from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import User from '../model/user.model.js';
-import connectToDB from '../config/connectToDB';
+import connectToDB from '../config/connectToDB.js';
 dotenv.config();
 
 export const handleRefreshToken = async (req, res) => {
