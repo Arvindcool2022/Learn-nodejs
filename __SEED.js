@@ -11,10 +11,8 @@ const seedEmployeeData = async () => {
     const employees = JSON.parse(readFileSync(jsonPath, 'utf-8'));
     if (!employees?.length)
       throw new Error('No data found in employeesData.json');
-    const connected = await connectToDB();
-    if (connected) await Employee.insertMany(employees);
-    else throw new Error('DB no connected');
-
+    await connectToDB();
+    await Employee.insertMany(employees);
     console.log('employees data seeded');
   } catch (error) {
     console.error(error);
@@ -25,9 +23,8 @@ const seedUserData = async () => {
   try {
     const user = JSON.parse(readFileSync(userjsonPath, 'utf-8'));
     if (!user?.length) throw new Error('No data found in userData.json');
-    const connected = await connectToDB();
-    if (connected) await User.insertMany(user);
-    else throw new Error('DB no connected');
+    await connectToDB();
+    await User.insertMany(user);
     console.log('user data seeded');
   } catch (error) {
     console.error(error);

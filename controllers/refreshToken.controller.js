@@ -7,8 +7,7 @@ dotenv.config();
 
 export const handleRefreshToken = async (req, res) => {
   try {
-    const connected = await connectToDB();
-    if (!connected) throw new Error('DB no connected');
+    await connectToDB();
 
     const { cookies } = req;
     if (!cookies?.jwt) return res.sendStatus(401);

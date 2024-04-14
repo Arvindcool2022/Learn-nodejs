@@ -4,8 +4,8 @@ import connectToDB from '../config/connectToDB.js';
 
 const handleRegister = async (req, res) => {
   try {
-    const connected = await connectToDB();
-    if (!connected) throw new Error('DB no connected');
+    await connectToDB();
+
     const { userName, password } = req.body;
 
     if (!userName || !password) {
