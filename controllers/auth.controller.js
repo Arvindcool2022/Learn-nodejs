@@ -36,20 +36,19 @@ const handleLogIn = async (req, res) => {
       { expiresIn: '1d' }
     );
 
-    const updatedUser = await User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { userName },
       { $set: { refreshToken } },
       { new: true } // Return the updated document
     );
-    await updatedUser.save();
     res.cookie('jwt', refreshToken, {
-      http: true,
+      httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24
     });
     res.json({ accessToken });
   } catch (err) {
     console.error('Error in auth.controller : ', err);
-    res.status(500);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 

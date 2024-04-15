@@ -9,7 +9,7 @@ const userSchema = new Schema({
     editor: Number,
     user: Number
   },
-  refreshToken: String
+  refreshToken: { type: String | null }
 });
 
 const alreadyExists = mongoose.models?.User; //# Prevents Duplicate Models
