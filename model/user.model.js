@@ -7,9 +7,9 @@ const userSchema = new Schema({
   roles: {
     admin: { type: Number, default: 5050 },
     editor: Number,
-    user: Number
+    user: Number,
   },
-  refreshToken: { type: String | null }
+  refreshToken: { type: String, default: null },
 });
 
 const alreadyExists = mongoose.models?.User; //# Prevents Duplicate Models

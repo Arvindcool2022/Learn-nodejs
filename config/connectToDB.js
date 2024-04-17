@@ -13,13 +13,14 @@ const connectToDB = async () => {
     }
 
     console.log('connecting to DB');
+    console.log(process.env.DATABASE_URI);
     const db = await mongoose.connect(process.env.DATABASE_URI);
     console.log('connected to DB');
     connection.isConnected = db.connection;
     return true;
   } catch (error) {
     console.log(' failed to connect DB: ', error);
-    throw new Error('DB no connected');
+    throw new Error('DB no connected: ', error);
   }
 };
 
