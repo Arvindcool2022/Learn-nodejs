@@ -52,4 +52,4 @@ function mid2(req, res, next) {
   next();
 }
 
-//TODO: add credencials middleware, set secure true. (more on TODO before frontend.txt)
+//TODO: add credencials middleware, set secure true(=== only works on https). (more on TODO before frontend.txt)
